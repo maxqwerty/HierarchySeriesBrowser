@@ -16,10 +16,16 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    hierarchytree.cpp \
+    jsonloader.cpp \
     main.cpp \
+    serieschartitemdelegate.cpp \
     widget.cpp
 
 HEADERS += \
+    hierarchytree.h \
+    jsonloader.h \
+    serieschartitemdelegate.h \
     widget.h
 
 # Default rules for deployment.
