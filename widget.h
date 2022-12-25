@@ -6,7 +6,7 @@
 #include "jsonloader.h"
 #include "hierarchytree.h"
 
-class QMenu;
+class TimeIntervalSelector;
 
 class Widget : public QWidget
 {
@@ -22,6 +22,7 @@ private slots:
 private:
     JsonLoader* m_dataLoader;
     HierarchyTree* m_treeView;
+    TimeIntervalSelector* m_intervalSelector;
 
 };
 #endif // WIDGET_H

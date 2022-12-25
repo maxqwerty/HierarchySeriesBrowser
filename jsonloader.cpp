@@ -18,6 +18,7 @@ JsonLoader::JsonLoader(QString fileName)
 QStandardItemModel* JsonLoader::makeModel() const
 {
     auto model = new QStandardItemModel(0, 2);
+    model->setHorizontalHeaderLabels({"Entity name", "Series values"});
     QStandardItem* rootItem = model->invisibleRootItem();
     rootItem->setData("root", Qt::DisplayRole);
 

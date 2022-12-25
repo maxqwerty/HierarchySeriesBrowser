@@ -1,6 +1,7 @@
 #include "widget.h"
 
 #include "serieschartitemdelegate.h"
+#include "timeintervalselector.h"
 
 #include <QFileDialog>
 #include <QMenu>
@@ -20,6 +21,10 @@ Widget::Widget(QWidget *parent)
 
     QMenuBar* menuBar = new QMenuBar();
     menuBar->addMenu(fileMenu);
+
+    m_intervalSelector = new TimeIntervalSelector();
+    m_intervalSelector->setGlobalTimeInterval(QTime::currentTime(), QTime::currentTime().addSecs(300));
+    mainLayout->addWidget(m_intervalSelector);
 
     m_treeView = new HierarchyTree();
     mainLayout->addWidget(m_treeView);

@@ -20,12 +20,14 @@ SOURCES += \
     jsonloader.cpp \
     main.cpp \
     serieschartitemdelegate.cpp \
+    timeintervalselector.cpp \
     widget.cpp
 
 HEADERS += \
     hierarchytree.h \
     jsonloader.h \
     serieschartitemdelegate.h \
+    timeintervalselector.h \
     widget.h
 
 # Default rules for deployment.
