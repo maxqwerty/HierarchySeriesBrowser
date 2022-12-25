@@ -16,7 +16,10 @@ protected:
     QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const override;
 
 private slots:
-    void onTimeIntervalChanged(QPair<QTime, QTime> timeRange);
+    void onTimeIntervalChanged(QPair<QDateTime, QDateTime> timeRange);
+
+private:
+    void paintSeriesChart(const QJsonArray& seriesArr, const QRect &rect, QPainter* painter)const;
 
 private:
     TimeIntervalSelector* m_timeIntervalSelector;

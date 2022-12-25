@@ -6,6 +6,7 @@
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QAbstractItemModel>
+#include <QMap>
 
 #include <QDebug>
 
@@ -21,25 +22,47 @@ QSize SeriesChartItemDelegate::sizeHint(const QStyleOptionViewItem& option, cons
     return QSize(100, 25);
 }
 
-void SeriesChartItemDelegate::onTimeIntervalChanged(QPair<QTime, QTime> timeRange)
+void SeriesChartItemDelegate::onTimeIntervalChanged(QPair<QDateTime, QDateTime> timeRange)
 {
     qDebug() << "Selected time range:" << timeRange;
 }
 
-void paintSeriesChart(const QJsonArray& seriesArr, const QRect &rect, QPainter* painter) {
-    int maxValue = INT_MIN;
+void SeriesChartItemDelegate::paintSeriesChart(const QJsonArray& seriesArr, const QRect &rect, QPainter* painter)const {
+    auto selectedRange = m_timeIntervalSelector->selectedTimeRange();
+    int msInterval = selectedRange.first.msecsTo(selectedRange.second);
+    int msecPerPixel = (float)msInterval / rect.width();
 
+    QMap<int, int> chartValues;
     for(auto arrValue : seriesArr) {
         auto obj = arrValue.toObject();
-        maxValue = qMax(maxValue, obj["v"].toInt());
+
+        auto time = QDateTime::fromString(obj["t"].toString(), Qt::ISODateWithMs);
+        auto value = obj["v"].toInt();
+
+        if (time < selectedRange.first || time > selectedRange.second) {
+            continue;
+        }
+
+        int pixelIndex = selectedRange.first.msecsTo(time) / msecPerPixel;
+        if (!chartValues.contains(pixelIndex)) {
+            chartValues[pixelIndex] = 0;
+        }
+
+        chartValues[pixelIndex] += value;
     }
 
-    for(int i=0 ; i<seriesArr.size(); ++i) {
-        auto obj = seriesArr.at(i).toObject();
-        double value = obj["v"].toInt();
-        auto valueHeight = rect.height() * value / maxValue;
+    int maxValue = INT_MIN;
 
-        painter->drawLine(rect.left() + i, rect.bottom(), rect.left() + i, rect.bottom() - valueHeight);
+    for(auto v: chartValues.values()) {
+        maxValue = qMax(maxValue, v);
+    }
+
+    for(auto pixel : chartValues.keys()) {
+        int valueHeight = (float)chartValues[pixel] / maxValue * rect.height();
+
+        if (chartValues.contains(pixel)) {
+            painter->drawLine(rect.left() + pixel, rect.bottom(), rect.left() + pixel, rect.bottom() - valueHeight);
+        }
     }
 
 }

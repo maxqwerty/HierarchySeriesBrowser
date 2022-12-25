@@ -1,7 +1,7 @@
 #ifndef TIMEINTERVALSELECTOR_H
 #define TIMEINTERVALSELECTOR_H
 
-#include <QTime>
+#include <QDateTime>
 #include <QWidget>
 
 class TimeIntervalSelector : public QWidget
@@ -10,9 +10,10 @@ class TimeIntervalSelector : public QWidget
 public:
     explicit TimeIntervalSelector(QWidget *parent = nullptr);
 
-    void setGlobalTimeInterval(QTime start, QTime end);
+    void setGlobalTimeInterval(QDateTime start, QDateTime end);
 
-    QPair<QTime, QTime> globalTimeRange();
+    QPair<QDateTime, QDateTime> globalTimeRange();
+    QPair<QDateTime, QDateTime> selectedTimeRange();
 
 protected:
     void mousePressEvent(QMouseEvent *event) override;
@@ -34,16 +35,16 @@ private:
     void calcNewSelectedPos(int newX);
 
 signals:
-    void timeIntervalSelected(QPair<QTime, QTime>);
+    void timeIntervalSelected(QPair<QDateTime, QDateTime>);
 
 private:
-    QTime m_globalStart;
-    QTime m_globalEnd;
-    QTime m_selectedStart;
-    QTime m_selectedEnd;
+    QDateTime m_globalStart;
+    QDateTime m_globalEnd;
+    QDateTime m_selectedStart;
+    QDateTime m_selectedEnd;
 
-    bool m_isSelectedStart;
-    bool m_isSelectedEnd;
+    bool m_isSelectedStart = false;
+    bool m_isSelectedEnd = false;
 };
 
 #endif // TIMEINTERVALSELECTOR_H

@@ -18,11 +18,14 @@ public:
 
 private slots:
     void openFile();
+    void onHeaderResized(int logicalIndex, int oldSize, int newSize);
+    void deleteSelected();
 
 private:
     JsonLoader* m_dataLoader;
     HierarchyTree* m_treeView;
     TimeIntervalSelector* m_intervalSelector;
+    QWidget* m_intervalSelectorSpacer;
 
 };
 #endif // WIDGET_H

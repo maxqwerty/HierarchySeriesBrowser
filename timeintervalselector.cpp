@@ -13,7 +13,7 @@ TimeIntervalSelector::TimeIntervalSelector(QWidget *parent) : QWidget(parent)
     setMinimumSize(100, 50);
 }
 
-void TimeIntervalSelector::setGlobalTimeInterval(QTime start, QTime end)
+void TimeIntervalSelector::setGlobalTimeInterval(QDateTime start, QDateTime end)
 {
     m_globalStart = start;
     m_globalEnd = end;
@@ -25,9 +25,14 @@ void TimeIntervalSelector::setGlobalTimeInterval(QTime start, QTime end)
     update();
 }
 
-QPair<QTime, QTime> TimeIntervalSelector::globalTimeRange()
+QPair<QDateTime, QDateTime> TimeIntervalSelector::globalTimeRange()
 {
     return {m_globalStart, m_globalEnd};
+}
+
+QPair<QDateTime, QDateTime> TimeIntervalSelector::selectedTimeRange()
+{
+    return {m_selectedStart, m_selectedEnd};
 }
 
 void TimeIntervalSelector::mousePressEvent(QMouseEvent* event)
@@ -138,10 +143,10 @@ void TimeIntervalSelector::paintRangeHandlers(QPainter* painter)
 
 
     painter->drawRect(-40, selectedStartPos(), 40, HANDLER_WIDTH);
-    painter->drawText(-40, selectedStartPos() + 10, m_selectedStart.toString());
+    painter->drawText(-40, selectedStartPos() + 10, m_selectedStart.time().toString());
 
     painter->drawRect(-40, selectedEndPos() - HANDLER_WIDTH - 1, 40, HANDLER_WIDTH);
-    painter->drawText(-40, selectedEndPos() - 3, m_selectedEnd.toString());
+    painter->drawText(-40, selectedEndPos() - 3, m_selectedEnd.time().toString());
 
     painter->restore();
 }

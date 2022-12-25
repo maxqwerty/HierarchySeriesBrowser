@@ -15,8 +15,13 @@ JsonLoader::JsonLoader(QString fileName)
     m_jsonDoc = QJsonDocument::fromJson(data);
 }
 
-QStandardItemModel* JsonLoader::makeModel() const
+QStandardItemModel* JsonLoader::makeModel()
 {
+    // TODO: add time-values for every level
+
+    m_minDate = QDateTime::currentDateTimeUtc().addYears(1000);
+    m_maxDate = QDateTime::fromSecsSinceEpoch(0);
+
     auto model = new QStandardItemModel(0, 2);
     model->setHorizontalHeaderLabels({"Entity name", "Series values"});
     QStandardItem* rootItem = model->invisibleRootItem();
@@ -52,10 +57,26 @@ QStandardItemModel* JsonLoader::makeModel() const
                     seriesItem->setData(lvl4Values);
 
                     lvl3Item->appendRow({lvl4Item, seriesItem});
+
+                    for (auto dataValue : lvl4Values) {
+                        auto dt = QDateTime::fromString(dataValue.toObject()["t"].toString(), Qt::ISODateWithMs);
+                        m_minDate = qMin(m_minDate, dt);
+                        m_maxDate = qMax(m_maxDate, dt);
+                    }
                 }
             }
         }
     }
 
     return model;
+}
+
+QDateTime JsonLoader::minDate() const
+{
+    return m_minDate;
+}
+
+QDateTime JsonLoader::maxDate() const
+{
+    return m_maxDate;
 }
