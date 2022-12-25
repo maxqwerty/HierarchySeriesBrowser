@@ -20,34 +20,44 @@ void TimeIntervalSelector::setGlobalTimeInterval(QTime start, QTime end)
     m_selectedStart = start;
     m_selectedEnd = end;
 
+    emit timeIntervalSelected({m_selectedStart, m_selectedEnd});
+
     update();
+}
+
+QPair<QTime, QTime> TimeIntervalSelector::globalTimeRange()
+{
+    return {m_globalStart, m_globalEnd};
 }
 
 void TimeIntervalSelector::mousePressEvent(QMouseEvent* event)
 {
-    if (event->x() > selectedStartPos() && event->x() < (selectedStartPos() + HANDLER_WIDTH)) {
-        m_isSelectedStart = true;
-    }
-    if (event->x() > (selectedEndPos() - HANDLER_WIDTH) && event->x() < selectedEndPos()) {
-        m_isSelectedEnd = true;
+    if (event->button() == Qt::LeftButton) {
+        if (event->x() > selectedStartPos() && event->x() < (selectedStartPos() + HANDLER_WIDTH)) {
+            m_isSelectedStart = true;
+        } else if (event->x() > (selectedEndPos() - HANDLER_WIDTH) && event->x() < selectedEndPos()) {
+            m_isSelectedEnd = true;
+        }
     }
 }
 
 void TimeIntervalSelector::mouseMoveEvent(QMouseEvent* event)
 {
-    if (event->buttons() == Qt::LeftButton) {
+    if (event->buttons() & Qt::LeftButton) {
         calcNewSelectedPos(event->pos().x());
     }
 }
 
 void TimeIntervalSelector::mouseReleaseEvent(QMouseEvent* event)
 {
-    if (event->buttons() == Qt::LeftButton) {
+    if (event->button() == Qt::LeftButton) {
         calcNewSelectedPos(event->pos().x());
-    }
 
-    m_isSelectedStart = false;
-    m_isSelectedEnd = false;
+        m_isSelectedStart = false;
+        m_isSelectedEnd = false;
+
+        emit timeIntervalSelected({m_selectedStart, m_selectedEnd});
+    }
 }
 
 void TimeIntervalSelector::resizeEvent(QResizeEvent* event)

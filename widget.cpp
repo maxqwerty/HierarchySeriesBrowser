@@ -44,8 +44,8 @@ void Widget::openFile()
 
     m_dataLoader = new JsonLoader(fileName);
 
-   m_treeView->setModel(m_dataLoader->makeModel());
-   auto seriesDataDelegate = new SeriesChartItemDelegate();
-   m_treeView->setItemDelegateForColumn(1, seriesDataDelegate);
+    m_treeView->setModel(m_dataLoader->makeModel());
+    auto seriesDataDelegate = new SeriesChartItemDelegate(m_intervalSelector);
+    m_treeView->setItemDelegateForColumn(1, seriesDataDelegate);
 }
 

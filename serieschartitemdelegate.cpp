@@ -1,4 +1,5 @@
 #include "serieschartitemdelegate.h"
+#include "timeintervalselector.h"
 
 #include <QPainter>
 #include <QStyledItemDelegate>
@@ -8,14 +9,21 @@
 
 #include <QDebug>
 
-SeriesChartItemDelegate::SeriesChartItemDelegate()
+SeriesChartItemDelegate::SeriesChartItemDelegate(TimeIntervalSelector* timeIntervalSelector)
+    : m_timeIntervalSelector(timeIntervalSelector)
 {
-
+    connect(m_timeIntervalSelector, &TimeIntervalSelector::timeIntervalSelected,
+            this, &SeriesChartItemDelegate::onTimeIntervalChanged);
 }
 
 QSize SeriesChartItemDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
     return QSize(100, 25);
+}
+
+void SeriesChartItemDelegate::onTimeIntervalChanged(QPair<QTime, QTime> timeRange)
+{
+    qDebug() << "Selected time range:" << timeRange;
 }
 
 void paintSeriesChart(const QJsonArray& seriesArr, const QRect &rect, QPainter* painter) {

@@ -12,6 +12,8 @@ public:
 
     void setGlobalTimeInterval(QTime start, QTime end);
 
+    QPair<QTime, QTime> globalTimeRange();
+
 protected:
     void mousePressEvent(QMouseEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
@@ -32,7 +34,7 @@ private:
     void calcNewSelectedPos(int newX);
 
 signals:
-    void timeIntervalSelected(QTime start, QTime end);
+    void timeIntervalSelected(QPair<QTime, QTime>);
 
 private:
     QTime m_globalStart;
